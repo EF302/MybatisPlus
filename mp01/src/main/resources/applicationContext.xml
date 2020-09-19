@@ -11,10 +11,8 @@
 
 
 	<!-- 数据源 -->
-	<context:property-placeholder
-		location="classpath:db.properties" />
-	<bean id="dataSource"
-		class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<context:property-placeholder location="classpath:db.properties" />
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driver}"></property>
 		<property name="jdbcUrl" value="${jdbc.url}"></property>
 		<property name="user" value="${jdbc.username}"></property>
@@ -27,37 +25,35 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	<!-- 基于注解的事务管理 -->
-	<tx:annotation-driven
-		transaction-manager="dataSourceTransactionManager" />
+	<tx:annotation-driven transaction-manager="dataSourceTransactionManager" />
 
 
 	<!-- 配置SqlSessionFactoryBean
-		Mybatis提供的: org.mybatis.spring.SqlSessionFactoryBean 
-		MP提供的:com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean -->
+		Mybatis提供的：org.mybatis.spring.SqlSessionFactoryBean 
+		MP提供的：com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean -->
 	<bean id="sqlSessionFactoryBean"
 		class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
 		<!-- 数据源 -->
-		<property name="dataSource" ref="dataSource"></property>
-		<property name="configLocation"
-			value="classpath:mybatis-config.xml"></property>
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 整合MyBatis的配置文件 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
 		<!-- 别名处理 -->
-		<property name="typeAliasesPackage"
-			value="com.atguigu.mp.beans"></property>
+		<property name="typeAliasesPackage" value="com.atguigu.mp.beans"/>
 
 		<!-- 注入全局MP策略配置 -->
 		<property name="globalConfig" ref="globalConfiguration"></property>
 	</bean>
 
 	<!-- 定义MybatisPlus的全局策略配置 -->
-	<bean id="globalConfiguration"
-		class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+	<bean id="globalConfiguration" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+		
 		<!-- 在2.3版本以后，dbColumnUnderline 默认值就是true -->
 		<property name="dbColumnUnderline" value="true"></property>
 
-		<!-- 全局的主键策略 -->
+		<!-- 全局的主键策略 ，是枚举值：AUTO(0, "数据库ID自增"), INPUT(1, "用户输入ID")-->
 		<property name="idType" value="0"></property>
 
-		<!-- 全局的表前缀策略配置 -->
+		<!-- 全局的表前缀策略配置（数据库表一般有固定前缀！） -->
 		<property name="tablePrefix" value="tbl_"></property>
 
 	</bean>

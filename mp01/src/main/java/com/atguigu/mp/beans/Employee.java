@@ -5,18 +5,19 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
-
-// MybatisPlus会默认使用实体类的类名到数据库中找对应的表. 
-//@TableName(value="tbl_employee")
+//虽然MybatisPlus会默认使用实体类的类名到数据库中找对应的表，但数据库中的表名一般会加固定前缀
+@TableName(value="tbl_employee")
 public class Employee {
+	
 	/*
 	 * @TableId:
 	 * 	 value: 指定表中的主键列的列名， 如果实体属性名与列名一致，可以省略不指定. 
 	 *   type: 指定主键策略. 
+	 * 注意：MyBatisPlus中，映射的实体类中如果不指定主键策略，会报数据类型不匹配异常mismatch
 	 */
 	@TableId(value="id" , type =IdType.AUTO)
+	//性别：0代表男，1代表女
 	private Integer id ;   
-	
 	@TableField(value = "last_name")
 	private String  lastName; 
 	private String  email ;
