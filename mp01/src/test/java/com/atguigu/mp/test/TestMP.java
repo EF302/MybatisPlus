@@ -28,91 +28,91 @@ public class TestMP {
 			ioc.getBean("employeeMapper",EmployeeMapper.class);
 	
 	/**
-	 * 条件构造器  删除操作
+	 * 条件构造器  删除操作：delete
 	 */
 	@Test
 	public void testEntityWrapperDelete() {
 		
-		employeeMapper.delete(
+		Integer result = employeeMapper.delete(
 					new EntityWrapper<Employee>()
 					.eq("last_name", "Tom")
 					.eq("age", 22)
 				);
+		System.out.println("result："+result);
 	}
 	
 	
 	/**
-	 * 条件构造器  修改操作
+	 * 条件构造器  修改操作：update
 	 */
 	@Test
 	public void testEntityWrapperUpdate() {
 		
-		Employee employee = new Employee();
-		employee.setLastName("苍老师");
-		employee.setEmail("cls@sina.com");
-		employee.setGender(0);
-		
-		
-		employeeMapper.update(employee, 
-					new EntityWrapper<Employee>()
-					.eq("last_name", "Tom")
-					.eq("age", 44)
-					);
+//		Employee employee = new Employee();
+//		employee.setLastName("苍老师");
+//		employee.setEmail("cls@sina.com");
+//		employee.setGender(0);
+//		
+//		// 把名字为tom、年龄为20的记录修改
+//		int result = employeeMapper.update(employee, 
+//					new EntityWrapper<Employee>()
+//					.eq("last_name", "Tom")
+//					.eq("age", 20)
+//					);
+//		System.out.println("result:"+result);
 	}
 	
 	/**
-	 * 条件构造器   查询操作
+	 * 条件构造器   查询操作：selectPage、selectList
 	 */
 	@Test
 	public void testEntityWrapperSelect() {
-		//我们需要分页查询tbl_employee表中，年龄在18~50之间且性别为男且姓名为Tom的所有用户
 		
-//		List<Employee> emps =employeeMapper.selectPage(new Page<Employee>(1, 2),
-//					new EntityWrapper<Employee>()
-//					.between("age", 18, 50)
-//					.eq("gender", 1)
-//					.eq("last_name", "Tom")
-//				);
+		// 我们需要分页查询tbl_employee表中，年龄在18~50之间且性别为男且姓名为Tom的所有用户
+		// 虽然Map也可以封装多条件查询，但是一般也仅仅用于简单且具体的多条件查询
+		// 注意：条件构造器中的条件字段与数据库中的字段一致！
+//		Page<Employee> page = new Page<Employee>(1,3);
+//		// 注意：page参数不能为null
+//		List<Employee> emps = employeeMapper.selectPage(page,new EntityWrapper<Employee>()
+//				.between("age", 18, 50)
+//				.eq("gender", 1)
+//				.eq("last_name", "Tom"));
 //		System.out.println(emps);
 	
-		
-		List<Employee > emps = employeeMapper.selectPage(
-							new Page<Employee>(1,2), 
-							Condition.create()
-							.between("age", 18, 50)
-							.eq("gender", "1")
-							.eq("last_name", "Tom")							
-							);
-		
-		System.out.println(emps);		
+		//使用条件构造器Condition实现：没有泛型参数，可以调用静态方法create()快速得到一个condition对象
+//		Page<Employee> page = new Page<Employee>(1,3);
+//		// 注意：page参数不能为null
+//		List<Employee> emps = employeeMapper.selectPage(page,Condition.create()
+//				.between("age", 18, 50)
+//				.eq("gender", 1)
+//				.eq("last_name", "Tom"));
+//		System.out.println(emps);
 		
 		
-		
-		
-		
-		// 查询tbl_employee表中， 性别为女并且名字中带有"老师" 或者  邮箱中带有"a"
-		
+		// 查询tbl_employee表中， 性别为女、名字中带有"老师" 或者  邮箱中带有"a"
 //		List<Employee> emps = employeeMapper.selectList(
 //				new EntityWrapper<Employee>()
 //				.eq("gender", 0)
 //				.like("last_name", "老师")
-//				//.or()    // SQL: (gender = ? AND last_name LIKE ? OR email LIKE ?)    
+////				.or()    // SQL: (gender = ? AND last_name LIKE ? OR email LIKE ? )   
 //				.orNew()   // SQL: (gender = ? AND last_name LIKE ?) OR (email LIKE ?) 
-//				.like("email", "a")
-//				);
+//				.like("email", "a"));
 //		System.out.println(emps);
 		
 		
 		// 查询性别为女的, 根据age进行排序(asc/desc), 简单分页
-		
-//		List<Employee> emps  = employeeMapper.selectList(
-//				new EntityWrapper<Employee>()
-//				.eq("gender", 0)
-//				.orderBy("age")
-//				//.orderDesc(Arrays.asList(new String [] {"age"}))
-//				.last("desc limit 1,3")
-//				);
-//		System.out.println(emps);
+		List<Employee> emps  = employeeMapper.selectList(
+				new EntityWrapper<Employee>()
+				.eq("gender", 0)
+				.orderBy("age")//默认为升序
+				//倒序，需要传入一个List集合参数
+//				.orderDesc(Arrays.asList(new String [] {"age"}))
+				//也可在orderBy的同时，借助last方法，手动拼接一个字符串到查询结尾，有sql注入的风险！
+//				.last("desc")
+				//简单分页：limit是MySQL内置函数，其作用用于限制查询结果的条数，第一个参数为偏移量，第二个参数为记录条数限制
+				.last("desc limit 1,2")
+				);
+		System.out.println(emps);
 		
 	}
 	
@@ -124,8 +124,8 @@ public class TestMP {
 	public void testCommonDelete() {
 		
 		//1 .根据id进行删除
-		Integer result = employeeMapper.deleteById(13);
-		System.out.println("result: " + result );
+//		Integer result = employeeMapper.deleteById(13);
+//		System.out.println("result: " + result );
 		
 		//2. 根据条件进行删除
 //		Map<String,Object> columnMap = new HashMap<>();
