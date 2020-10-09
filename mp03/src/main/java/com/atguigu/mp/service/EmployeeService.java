@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.service.IService;
  *  服务类
  * </p>
  *
- * @author weiyunhui
- * @since 2018-06-21
+ * @author longwanli
+ * @since 2020-10-09
  */
 public interface EmployeeService extends IService<Employee> {
 

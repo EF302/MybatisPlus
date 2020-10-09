@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
 	
-	//不用再进行mapper的注入.
+	//ServiceImpl中有baseMapper属性对象，不用再进行mapper的注入.
 	
 	/**
 	 * EmployeeServiceImpl继承了ServiceImpl

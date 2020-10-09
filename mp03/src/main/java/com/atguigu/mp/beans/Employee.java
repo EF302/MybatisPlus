@@ -13,8 +13,8 @@ import java.io.Serializable;
  * 
  * </p>
  *
- * @author weiyunhui
- * @since 2018-06-21
+ * @author longwanli
+ * @since 2020-10-09
  */
 @TableName("tbl_employee")
 public class Employee extends Model<Employee> {
